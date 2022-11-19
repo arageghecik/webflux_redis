@@ -25,6 +25,7 @@ public class PlaneFinderPoller {
     private void pollPlanes() {
         //clear redis all data
         connectionFactory.getConnection().serverCommands().flushDb();
+        //flux reactive data type
         //flux is publisher in reactive approach, we get data from webclient in flux form
         Flux<Aircraft> aircraftFlux = client.get().retrieve().bodyToFlux(Aircraft.class);
 
