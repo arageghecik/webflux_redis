@@ -1,7 +1,6 @@
 package com.example.webflux_redis;
 
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -13,13 +12,13 @@ import reactor.core.publisher.Flux;
 public class PlaneFinderPoller {
     private WebClient client = WebClient.create("http://localhost:7634/aircraft");
 
-    public PlaneFinderPoller(RedisConnectionFactory connectionFactory, RedisOperations<String, Aircraft> redisOperations) {
+    public PlaneFinderPoller(RedisConnectionFactory connectionFactory, AircraftRepository aircraftRepository) {
         this.connectionFactory = connectionFactory;
-        this.redisOperations = redisOperations;
+        this.aircraftRepository = aircraftRepository;
     }
 
     private final RedisConnectionFactory connectionFactory;
-    private final RedisOperations<String, Aircraft> redisOperations;
+    private final AircraftRepository aircraftRepository;
 
     @Scheduled(fixedRate = 9000)
     private void pollPlanes() {
@@ -31,11 +30,10 @@ public class PlaneFinderPoller {
 
         //storing data to redis
         aircraftFlux.filter(plane -> !plane.getReg().isEmpty())
-                //.subscribe(ac -> redisOperations.opsForValue().set(ac.getReg(), ac)); // this variant didn't work
-                .toStream().forEach(ac -> redisOperations.opsForValue().set(ac.getReg(), ac));
+                .toStream().forEach(aircraftRepository::save);
 
         // taking out data from redis
-        redisOperations.opsForValue().getOperations().keys("*").forEach(ac -> System.out.println(redisOperations.opsForValue().get(ac)));
+        aircraftRepository.findAll().forEach(System.out::println);
     }
 
 }
