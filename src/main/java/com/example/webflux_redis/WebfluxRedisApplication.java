@@ -12,16 +12,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @SpringBootApplication
 public class WebfluxRedisApplication {
 
-    @Bean
-    public RedisOperations<String, Aircraft> redisOperations(RedisConnectionFactory factory) {
-        Jackson2JsonRedisSerializer<Aircraft> serializer = new Jackson2JsonRedisSerializer(Aircraft.class);
-        RedisTemplate<String, Aircraft> template = new RedisTemplate<>();
-        template.setConnectionFactory(factory);
-        template.setDefaultSerializer(serializer);
-        template.setKeySerializer(new StringRedisSerializer());
-
-        return template;
-    }
 
     public static void main(String[] args) {
         SpringApplication.run(WebfluxRedisApplication.class, args);

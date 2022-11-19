@@ -6,14 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-
+import org.springframework.data.redis.core.RedisHash;
 import java.time.Instant;
 
+@RedisHash
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-
 public class Aircraft {
     @Id
     private Long id;
@@ -44,38 +44,4 @@ public class Aircraft {
     private Instant bds40SeenTime;
 
     //lombok auto set the getters and setters, but we need them in sting and parsing them here
-    public String getLastSeenTime() {
-        return lastSeenTime.toString();
-    }
-
-    public void setLastSeenTime(String lastSeenTime) {
-        if (lastSeenTime != null)
-            this.lastSeenTime = Instant.parse(lastSeenTime);
-        else
-            // ofEpochSecond - time in seconds from 1970 convert to yyyy-mm-ddThh:mm:ss format
-            //in our example it returns 1970-01-01T00:00:00Z
-            this.lastSeenTime = Instant.ofEpochSecond(0);
-    }
-
-    public String getPosUpdateTime() {
-        return posUpdateTime.toString();
-    }
-
-    public void setPosUpdateTime(String posUpdateTime) {
-        if (posUpdateTime != null)
-            this.posUpdateTime = Instant.parse(posUpdateTime);
-        else
-            this.posUpdateTime = Instant.ofEpochSecond(0);
-    }
-
-    public String getBds40SeenTime() {
-        return bds40SeenTime.toString();
-    }
-
-    public void setBds40SeenTime(String bds40SeenTime) {
-        if (bds40SeenTime != null)
-            this.bds40SeenTime = Instant.parse(bds40SeenTime);
-        else
-            this.bds40SeenTime = Instant.ofEpochSecond(0);
-    }
 }
