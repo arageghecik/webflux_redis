@@ -42,6 +42,4 @@ public class Aircraft {
     private Instant posUpdateTime;
     @JsonProperty("bds40_seen_time")
     private Instant bds40SeenTime;
-
-    //lombok auto set the getters and setters, but we need them in sting and parsing them here
 }
