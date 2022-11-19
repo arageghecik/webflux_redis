@@ -43,6 +43,7 @@ public class Aircraft {
     @JsonProperty("bds40_seen_time")
     private Instant bds40SeenTime;
 
+    //lombok auto set the getters and setters, but we need them in sting and parsing them here
     public String getLastSeenTime() {
         return lastSeenTime.toString();
     }
@@ -51,6 +52,8 @@ public class Aircraft {
         if (lastSeenTime != null)
             this.lastSeenTime = Instant.parse(lastSeenTime);
         else
+            // ofEpochSecond - time in seconds from 1970 convert to yyyy-mm-ddThh:mm:ss format
+            //in our example it returns 1970-01-01T00:00:00Z
             this.lastSeenTime = Instant.ofEpochSecond(0);
     }
 
