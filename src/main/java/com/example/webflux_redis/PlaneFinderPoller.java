@@ -1,5 +1,6 @@
 package com.example.webflux_redis;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -9,13 +10,9 @@ import reactor.core.publisher.Flux;
 
 @Component
 @EnableScheduling
+@RequiredArgsConstructor
 public class PlaneFinderPoller {
     private WebClient client = WebClient.create("http://localhost:7634/aircraft");
-
-    public PlaneFinderPoller(RedisConnectionFactory connectionFactory, AircraftRepository aircraftRepository) {
-        this.connectionFactory = connectionFactory;
-        this.aircraftRepository = aircraftRepository;
-    }
 
     private final RedisConnectionFactory connectionFactory;
     private final AircraftRepository aircraftRepository;
